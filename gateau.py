@@ -60,6 +60,9 @@ async def on_message(message):
     if 'gateau' in message.content.lower():
         await message.channel.send(cake.random_response_line())
 
+    if 'ilu gateau' in message.content.lower():
+        await message.channel.send('ilu2')
+
     await bot.process_commands(message)
 
 
