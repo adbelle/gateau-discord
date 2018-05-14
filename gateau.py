@@ -31,7 +31,7 @@ async def define(ctx, arg):
 
 @bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
 
     if 'true' in message.content.lower():
@@ -57,11 +57,10 @@ async def on_message(message):
     elif 'weed' in message.content.lower():
         await message.add_reaction('snoop:445053916598763520')
 
-    if 'gateau' in message.content.lower():
-        await message.channel.send(cake.random_response_line())
-
     if 'ilu gateau' in message.content.lower():
-        await message.channel.send('ilu2')
+        await message.channel.send(str('ilu2 <@' + str(message.author.id) + '>'))
+    elif 'gateau' in message.content.lower():
+        await message.channel.send(cake.random_response_line())
 
     await bot.process_commands(message)
 
