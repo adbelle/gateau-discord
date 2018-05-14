@@ -34,32 +34,32 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    if 'true' in message.content.lower():
+    if 'true' in str(message.content.lower()).split():
         await message.add_reaction('disc_true:445053952027787275')
 
-    if 'same' in message.content.lower():
+    if 'same' in str(message.content.lower()).split():
         await message.add_reaction('disc_same:445050329331925007')
 
-    if 'nice' in message.content.lower():
+    if 'nice' in str(message.content.lower()).split():
         await message.add_reaction('disc_nice:445054000019275787')
 
-    if 'real' in message.content.lower():
+    if 'real' in str(message.content.lower()).split():
         await message.add_reaction('disc_real:445054014405738498')
 
-    if 'cute' in message.content.lower():
+    if 'cute' in str(message.content.lower()).split():
         await message.add_reaction('disc_cute:445053981719265282')
 
-    if 'rude' in message.content.lower():
+    if 'rude' in str(message.content.lower()).split():
         await message.add_reaction('disc_rude:445054026904633361')
 
-    if 'bong' in message.content.lower():
+    if 'bong' in str(message.content.lower()).split():
         await message.add_reaction('snoop:445053916598763520')
-    elif 'weed' in message.content.lower():
+    elif 'weed' in str(message.content.lower()).split():
         await message.add_reaction('snoop:445053916598763520')
 
-    if 'ilu gateau' in message.content.lower():
+    if 'ilu gateau' in str(message.content.lower()).split():
         await message.channel.send(str('ilu2 <@' + str(message.author.id) + '>'))
-    elif 'gateau' in message.content.lower():
+    elif 'gateau' in str(message.content.lower()).split():
         await message.channel.send(cake.random_response_line())
 
     await bot.process_commands(message)
