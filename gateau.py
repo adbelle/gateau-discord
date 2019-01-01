@@ -57,10 +57,11 @@ async def on_message(message):
     elif 'weed' in str(message.content.lower()).split():
         await message.add_reaction('snoop:445053916598763520')
 
-    if 'ilu gateau' in str(message.content.lower()).split():
-        await message.channel.send(str('ilu2 <@' + str(message.author.id) + '>'))
-    elif 'gateau' in str(message.content.lower()).split():
-        await message.channel.send(cake.random_response_line())
+    if 'gateau' in str(message.content.lower()).split():
+        if 'ilu' in str(message.content.lower()).split():
+            await message.channel.send(str('ilu2 <@' + str(message.author.id) + '>'))
+        else:
+            await message.channel.send(cake.random_response_line())
 
     await bot.process_commands(message)
 
