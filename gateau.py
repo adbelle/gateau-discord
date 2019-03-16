@@ -1,6 +1,6 @@
-import discord, logging, configparser
-import cake
+import discord, logging, configparser, googlemaps, cake, asyncio
 from discord.ext import commands
+from darksky import forecast
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s:%(name)s:%(message)s')
@@ -9,19 +9,51 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 discord_key = str(config['auth']['discord'])
 weather_key = str(config['auth']['weather'])
+maps_key = str(config['auth']['maps'])
+gameplay = str(config['personality']['playing'])
 
-bot = commands.Bot(command_prefix='!', activity=discord.Game(name='Complex Form Active!'))
+bot = commands.Bot(command_prefix='!', activity=discord.Game(name=gameplay))
 client = discord.Client()
 
 
 @bot.command()
 async def weather(ctx, arg):
-    await ctx.send(cake.read_weather(arg, weather_key, 'conditions'))
+    gmaps = googlemaps.Client(key=maps_key)
+    gtarget = str(arg)
+    geolat = str(gmaps.geocode(gtarget)[0]['geometry']['location']['lat'])
+    geolng = str(gmaps.geocode(gtarget)[0]['geometry']['location']['lng'])
+    geonam = str(gmaps.geocode(gtarget)[0]['formatted_address'])
 
+    dsdata = forecast(weather_key, geolat, geolng)
 
-@bot.command()
-async def forecast(ctx, arg):
-    await ctx.send(cake.read_weather(arg,weather_key, 'forecast'))
+    condout = str(dsdata.minutely.summary)
+    tempout = str(dsdata.temperature) + "°F, " + str(round(float(dsdata.temperature) - 32 * 5 / 9, 2)) + " °C"
+    windout = str(dsdata.windBearing) + "° at " + str(dsdata.windSpeed) + " mph (" + str(round(dsdata.windSpeed * 1.609, 2)) + " km/h)"
+    presout = str(dsdata.pressure) + " mb"
+    visiout = str(dsdata.visibility) + " mi"
+    precout = str("{0:.0%}".format(float(dsdata.precipProbability)))
+    strmout = str(dsdata.nearestStormDistance) + " mi"
+    respout = "Query took " + str(dsdata.response_headers['X-response-Time']) + " to process."
+
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    discicon = str(config['weather'][str(dsdata.icon)])
+
+    eheader = str(discicon + " Current Conditions for " + geonam)
+
+    embed = discord.Embed(title=eheader, colour=discord.Colour(0x7289da), description=condout)
+
+    embed.set_thumbnail(url="https://darksky.net/dev/img/attribution/poweredby-darkbackground.png")
+    embed.set_footer(text=respout, icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
+
+    embed.add_field(name="<:Thermometer50:556351518387732481> Temperature", value=tempout, inline=True)
+    embed.add_field(name="<:Wind:556349822014062618> Wind", value=windout, inline=True)
+    embed.add_field(name="<:Cloud_Download:556356419780214785> Pressure", value=presout, inline=True)
+    embed.add_field(name="<:Cloud_Download:556359914017128467> Visibility", value=visiout, inline=True)
+    embed.add_field(name="<:Umbrella:556358404638113801> Precipitation Chance", value=precout, inline=True)
+    embed.add_field(name="<:Compass:556359903976095765> Nearest Storm Distance", value=strmout, inline=True)
+
+    await ctx.send(embed=embed)
 
 
 @bot.command()
