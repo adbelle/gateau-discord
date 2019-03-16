@@ -94,27 +94,23 @@ async def on_message(message):
 
     if 'true' in str(message.content.lower()).split():
         await message.add_reaction('disc_true:445053952027787275')
-
     if 'same' in str(message.content.lower()).split():
         await message.add_reaction('disc_same:445050329331925007')
-
     if 'nice' in str(message.content.lower()).split():
         await message.add_reaction('disc_nice:445054000019275787')
-
     if 'real' in str(message.content.lower()).split():
         await message.add_reaction('disc_real:445054014405738498')
-
     if 'cute' in str(message.content.lower()).split():
         await message.add_reaction('disc_cute:445053981719265282')
-
     if 'rude' in str(message.content.lower()).split():
         await message.add_reaction('disc_rude:445054026904633361')
-
     if 'bong' in str(message.content.lower()).split():
         await message.add_reaction('snoop:445053916598763520')
     elif 'weed' in str(message.content.lower()).split():
         await message.add_reaction('snoop:445053916598763520')
 
+    if 'takbir' in str(message.content.lower()).split():
+        await message.channel.send("ALLAHU AKBAR")
     if 'gateau' in str(message.content.lower()).split():
         if 'ilu' in str(message.content.lower()).split():
             await message.channel.send(str('ilu2 ' + message.author.mention))
