@@ -30,27 +30,47 @@ async def weather(ctx, arg):
         condout = str(dsdata.minutely.summary)
     except AttributeError:
         condout = str(dsdata.hourly.summary)
-    tempout = str(dsdata.temperature) + "°F, " + str(round(float(dsdata.temperature) - 32 * 5 / 9, 2)) + " °C"
-    windout = str(dsdata.windBearing) + "° at " + str(dsdata.windSpeed) + " mph (" + str(round(dsdata.windSpeed * 1.609, 2)) + " km/h)"
-    presout = str(dsdata.pressure) + " mb"
-    visiout = str(dsdata.visibility) + " mi"
-    precout = str("{0:.0%}".format(float(dsdata.precipProbability)))
+    try:
+        tempout = str(dsdata.temperature) + "°F, " + str(round(float(dsdata.temperature) - 32 * 5 / 9, 2)) + " °C"
+    except AttributeError:
+        tempout = "Unknown."
+    try:
+        windout = str(dsdata.windBearing) + "° at " + str(dsdata.windSpeed) + " mph (" + str(round(dsdata.windSpeed * 1.609, 2)) + " km/h)"
+    except AttributeError:
+        windout = "Unknown."
+    try:
+        presout = str(dsdata.pressure) + " mb"
+    except AttributeError:
+        presout = "Unknown."
+    try:
+        visiout = str(dsdata.visibility) + " mi"
+    except AttributeError:
+        visiout = "Unknown."
+    try:
+        precout = str("{0:.0%}".format(float(dsdata.precipProbability)))
+    except AttributeError:
+        precout = "Unknown."
     try:
         strmout = str(dsdata.nearestStormDistance) + " mi"
     except AttributeError:
         strmout = "Unknown."
-    respout = "Query took " + str(dsdata.response_headers['X-response-Time']) + " to process."
+    respout = 'Requested by ' + str(ctx.message.author.display_name) + '. Query took ' + str(dsdata.response_headers['X-response-Time']) + ' to process.'
 
     config = configparser.ConfigParser()
     config.read('config.ini')
-    discicon = str(config['weather'][str(dsdata.icon)])
+    try:
+        discicon = str(config['weather'][str(dsdata.icon)])
+    except AttributeError:
+        discicon = str(config['weather']['clear-day'])
+
+    footericon = str(ctx.message.author.avatar_url_as(format=None, static_format='png', size=1024))
 
     eheader = str(discicon + " Current Conditions for " + geonam)
 
     embed = discord.Embed(title=eheader, colour=discord.Colour(0x7289da), description=condout)
 
     embed.set_thumbnail(url="https://darksky.net/dev/img/attribution/poweredby-darkbackground.png")
-    embed.set_footer(text=respout, icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
+    embed.set_footer(text=respout, icon_url=footericon)
 
     embed.add_field(name="<:Thermometer50:556351518387732481> Temperature", value=tempout, inline=True)
     embed.add_field(name="<:Wind:556349822014062618> Wind", value=windout, inline=True)
@@ -97,7 +117,7 @@ async def on_message(message):
 
     if 'gateau' in str(message.content.lower()).split():
         if 'ilu' in str(message.content.lower()).split():
-            await message.channel.send(str('ilu2 <@' + str(message.author.id) + '>'))
+            await message.channel.send(str('ilu2 ' + message.author.mention))
         else:
             await message.channel.send(cake.random_response_line())
 
