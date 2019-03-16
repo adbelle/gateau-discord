@@ -26,13 +26,19 @@ async def weather(ctx, arg):
 
     dsdata = forecast(weather_key, geolat, geolng)
 
-    condout = str(dsdata.minutely.summary)
+    try:
+        condout = str(dsdata.minutely.summary)
+    except AttributeError:
+        condout = str(dsdata.hourly.summary)
     tempout = str(dsdata.temperature) + "°F, " + str(round(float(dsdata.temperature) - 32 * 5 / 9, 2)) + " °C"
     windout = str(dsdata.windBearing) + "° at " + str(dsdata.windSpeed) + " mph (" + str(round(dsdata.windSpeed * 1.609, 2)) + " km/h)"
     presout = str(dsdata.pressure) + " mb"
     visiout = str(dsdata.visibility) + " mi"
     precout = str("{0:.0%}".format(float(dsdata.precipProbability)))
-    strmout = str(dsdata.nearestStormDistance) + " mi"
+    try:
+        strmout = str(dsdata.nearestStormDistance) + " mi"
+    except AttributeError:
+        strmout = "Unknown."
     respout = "Query took " + str(dsdata.response_headers['X-response-Time']) + " to process."
 
     config = configparser.ConfigParser()
