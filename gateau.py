@@ -114,6 +114,8 @@ async def on_message(message):
     if 'gateau' in str(message.content.lower()).split():
         if 'ilu' in str(message.content.lower()).split():
             await message.channel.send(str('ilu2 ' + message.author.mention))
+        elif 'story' in str(message.content.lower()).split():
+            await message.channel.send(cake.read_pasta())
         else:
             await message.channel.send(cake.random_response_line())
 

@@ -22,3 +22,13 @@ def read_single_definition(deftitle):
             def_out = "Definition for " + row[0] + ":```\n" + row[1] + "```"
     conn.close()
     return def_out
+
+def read_pasta():
+    conn = sqlite3.connect('gateau.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM pasta ORDER BY RANDOM() LIMIT 1')
+    data = c.fetchall()
+    for row in data:
+        def_out = str(row[1])
+    conn.close()
+    return def_out
