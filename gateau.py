@@ -31,7 +31,7 @@ async def weather(ctx, arg):
     except AttributeError:
         condout = str(dsdata.hourly.summary)
     try:
-        tempout = str(dsdata.temperature) + "°F, " + str(round(float(dsdata.temperature) - 32 * 5 / 9, 2)) + " °C"
+        tempout = str(dsdata.temperature) + "°F, " + str(round((float(dsdata.temperature) - 32) * 5 / 9, 2)) + " °C"
     except AttributeError:
         tempout = "Unknown."
     try:
