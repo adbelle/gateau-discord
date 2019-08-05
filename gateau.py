@@ -1,4 +1,4 @@
-import discord, logging, configparser, googlemaps, cake, asyncio
+import discord, logging, configparser, googlemaps, cake, asyncio, string
 from discord.ext import commands
 from darksky import forecast
 
